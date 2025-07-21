@@ -37,16 +37,6 @@ export const ZabbixAIChat: React.FC = () => {
     scrollToBottom();
   }, [messages]);
 
-  const simulateBotResponse = (userMessage: string): string => {
-    // Simple response simulation - in real app, this would call your AI API
-    const responses = [
-      `I understand you're asking about "${userMessage}". Let me help you with that. In Zabbix, this typically involves configuring your monitoring templates and ensuring proper agent communication. Would you like me to walk you through the specific steps?`,
-      `Great question about "${userMessage}"! For Zabbix monitoring, I recommend starting with the built-in templates and then customizing based on your specific infrastructure needs. What type of environment are you monitoring?`,
-      `Regarding "${userMessage}" - this is a common scenario in Zabbix environments. The best approach usually involves setting up proper triggers and notifications. Let me know if you need help with the configuration specifics.`,
-    ];
-    return responses[Math.floor(Math.random() * responses.length)];
-  };
-
   const handleSendMessage = async (messageText: string) => {
     // Add user message
     const userMessage: Message = {
@@ -59,18 +49,49 @@ export const ZabbixAIChat: React.FC = () => {
     setMessages(prev => [...prev, userMessage]);
     setIsLoading(true);
 
-    // Simulate API delay
-    setTimeout(() => {
+    try {
+      const response = await fetch('http://localhost:8000/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: messageText }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      
       const botResponse: Message = {
         id: (Date.now() + 1).toString(),
-        text: simulateBotResponse(messageText),
+        text: data.response || 'Sorry, I received an empty response.',
         isBot: true,
         timestamp: new Date(),
       };
 
       setMessages(prev => [...prev, botResponse]);
+    } catch (error) {
+      console.error('Error fetching response:', error);
+      
+      const errorResponse: Message = {
+        id: (Date.now() + 1).toString(),
+        text: 'Sorry, I\'m having trouble connecting to the server. Please make sure the API is running on localhost:8000.',
+        isBot: true,
+        timestamp: new Date(),
+      };
+
+      setMessages(prev => [...prev, errorResponse]);
+      
+      toast({
+        title: "Connection Error",
+        description: "Failed to connect to the chat API",
+        variant: "destructive",
+      });
+    } finally {
       setIsLoading(false);
-    }, 1000 + Math.random() * 2000);
+    }
   };
 
   const handleLike = (messageId: string) => {
