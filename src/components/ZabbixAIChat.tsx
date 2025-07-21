@@ -128,8 +128,8 @@ export const ZabbixAIChat: React.FC = () => {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-4 py-2 mx-4 border border-white/20 rounded-2xl">
-        <div className="max-w-4xl mx-auto">
+      <div className="flex-1 overflow-y-auto px-4 py-2">
+        <div className="max-w-4xl mx-auto border border-white/20 rounded-2xl px-4 py-2">
           {messages.map((message) => (
             <MessageBubble
               key={message.id}
