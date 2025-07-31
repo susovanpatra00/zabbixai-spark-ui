@@ -68,7 +68,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
               onClick={onLike}
               className={`p-2 rounded-lg transition-all duration-200 hover:scale-110 ${
                 isLiked 
-                  ? 'bg-success/20 text-success shadow-[0_0_10px_hsla(120,70%,50%,0.3)]' 
+                  ? 'bg-primary/20 text-primary shadow-primary-glow' 
                   : 'hover:bg-muted text-muted-foreground'
               }`}
             >

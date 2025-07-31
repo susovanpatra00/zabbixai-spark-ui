@@ -53,7 +53,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled })
           onClick={toggleRecording}
           className={`flex-shrink-0 transition-all duration-300 ${
             isRecording 
-              ? 'bg-destructive/20 border-destructive text-destructive pulse-record' 
+              ? 'bg-primary/20 border-primary text-primary pulse-record' 
               : 'hover:bg-muted'
           }`}
         >
@@ -89,8 +89,8 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled })
       </form>
 
       {isRecording && (
-        <div className="mt-3 flex items-center justify-center gap-2 text-destructive">
-          <div className="w-2 h-2 bg-destructive rounded-full animate-pulse" />
+        <div className="mt-3 flex items-center justify-center gap-2 text-primary">
+          <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
           <span className="text-sm font-medium">Recording... Click mic to stop</span>
         </div>
       )}
